@@ -356,7 +356,7 @@
 			pos_action = document.createElement("a")
 			pos_action.classList.add("btn", "btn-primary", "mr-2")
 			pos_action.href = "#"
-			pos_action.innerHTML = "Accept"
+			pos_action.innerHTML = "接受"
 			pos_action.addEventListener("click", function(e){
 				e.stopPropagation();
 				sendAcceptFriendRequestToSocket(notification['notification_id'])
@@ -367,7 +367,7 @@
 			neg_action = document.createElement("a")
 			neg_action.classList.add("btn", "btn-secondary")
 			neg_action.href = "#"
-			neg_action.innerHTML = "Decline"
+			neg_action.innerHTML = "拒绝"
 			neg_action.addEventListener("click", function(e){
 				e.stopPropagation();
 				sendDeclineFriendRequestToSocket(notification['notification_id'])
@@ -413,7 +413,7 @@
 
 			span = document.createElement("span")
 			span.classList.add("align-items-start", "pt-1", "m-auto")
-			span.innerHTML = "You have no notifications."
+			span.innerHTML = "没有消息通知"
 			div.appendChild(span)
 			card.appendChild(div)
 			notificationContainer.appendChild(card)

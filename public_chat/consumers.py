@@ -66,7 +66,7 @@ class PublicChatConsumer(AsyncJsonWebsocketConsumer):
 					payload = json.loads(payload)
 					await self.send_messages_payload(payload['messages'], payload['new_page_number'])
 				else:
-					raise ClientError(204,"Something went wrong retrieving the chatroom messages.")
+					raise ClientError(204,"获取聊天信息失败")
 				await self.display_progress_bar(False)
 		except ClientError as e:
 			await self.display_progress_bar(False)
@@ -81,11 +81,11 @@ class PublicChatConsumer(AsyncJsonWebsocketConsumer):
 		print("PublicChatConsumer: send_room")
 		if self.room_id != None:
 			if str(room_id) != str(self.room_id):
-				raise ClientError("ROOM_ACCESS_DENIED", "Room access denied")
+				raise ClientError("ROOM_ACCESS_DENIED", "聊天室拒绝了您的加入")
 			if not is_authenticated(self.scope["user"]):
-				raise ClientError("AUTH_ERROR", "You must be authenticated to chat.")
+				raise ClientError("AUTH_ERROR", "登陆后才能聊天")
 		else:
-			raise ClientError("ROOM_ACCESS_DENIED", "Room access denied")
+			raise ClientError("ROOM_ACCESS_DENIED", "聊天室连接失败")
 
 		# Get the room and send to the group about it
 		room = await get_room_or_error(room_id)
@@ -275,7 +275,7 @@ def get_room_or_error(room_id):
 	try:
 		room = PublicChatRoom.objects.get(pk=room_id)
 	except PublicChatRoom.DoesNotExist:
-		raise ClientError("ROOM_INVALID", "Invalid room.")
+		raise ClientError("ROOM_INVALID", "聊天室不合规")
 	return room
 
 

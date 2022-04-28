@@ -37,7 +37,7 @@ class FriendList(models.Model):
 			# 	target=self.user,
 			# 	from_user=account,
 			# 	redirect_url=f"{settings.BASE_URL}/account/{account.pk}/",
-			# 	verb=f"You are now friends with {account.username}.",
+			# 	verb=f"您现在和 {account.username} 是朋友了",
 			# 	content_type=content_type,
 			# 	object_id=self.id,
 			# ).save()
@@ -46,7 +46,7 @@ class FriendList(models.Model):
 				target=self.user,
 				from_user=account,
 				redirect_url=f"{settings.BASE_URL}/account/{account.pk}/",
-				verb=f"You are now friends with {account.username}.",
+				verb=f"您现在和 {account.username} 是朋友了",
 				content_type=content_type,
 			)
 			self.save()
@@ -90,7 +90,7 @@ class FriendList(models.Model):
 			target=removee,
 			from_user=self.user,
 			redirect_url=f"{settings.BASE_URL}/account/{self.user.pk}/",
-			verb=f"You are no longer friends with {self.user.username}.",
+			verb=f"您被 {self.user.username} 删除了好友",
 			content_type=content_type,
 		)
 
@@ -99,7 +99,7 @@ class FriendList(models.Model):
 			target=self.user,
 			from_user=removee,
 			redirect_url=f"{settings.BASE_URL}/account/{removee.pk}/",
-			verb=f"You are no longer friends with {removee.username}.",
+			verb=f"您成功将 {removee.username} 移除好友",
 			content_type=content_type,
 		)
 
@@ -154,7 +154,7 @@ class FriendRequest(models.Model):
 			receiver_notification = Notification.objects.get(target=self.receiver, content_type=content_type, object_id=self.id)
 			receiver_notification.is_active = False
 			receiver_notification.redirect_url = f"{settings.BASE_URL}/account/{self.sender.pk}/"
-			receiver_notification.verb = f"You accepted {self.sender.username}'s friend request."
+			receiver_notification.verb = f"您接受了 {self.sender.username} 的好友请求"
 			receiver_notification.timestamp = timezone.now()
 			receiver_notification.save()
 
@@ -168,7 +168,7 @@ class FriendRequest(models.Model):
 					target=self.sender,
 					from_user=self.receiver,
 					redirect_url=f"{settings.BASE_URL}/account/{self.receiver.pk}/",
-					verb=f"{self.receiver.username} accepted your friend request.",
+					verb=f"{self.receiver.username} 接受了您的好友请求",
 					content_type=content_type,
 				)
 
@@ -193,7 +193,7 @@ class FriendRequest(models.Model):
 		notification = Notification.objects.get(target=self.receiver, content_type=content_type, object_id=self.id)
 		notification.is_active = False
 		notification.redirect_url = f"{settings.BASE_URL}/account/{self.sender.pk}/"
-		notification.verb = f"You declined {self.sender}'s friend request."
+		notification.verb = f"您拒绝了 {self.sender} 的好友请求"
 		notification.from_user = self.sender
 		notification.timestamp = timezone.now()
 		notification.save()
@@ -201,7 +201,7 @@ class FriendRequest(models.Model):
 		# Create notification for SENDER
 		self.notifications.create(
 			target=self.sender,
-			verb=f"{self.receiver.username} declined your friend request.",
+			verb=f"{self.receiver.username} 拒绝了您的好友申请",
 			from_user=self.receiver,
 			redirect_url=f"{settings.BASE_URL}/account/{self.receiver.pk}/",
 			content_type=content_type,
@@ -224,14 +224,14 @@ class FriendRequest(models.Model):
 		# Create notification for SENDER
 		self.notifications.create(
 			target=self.sender,
-			verb=f"You cancelled the friend request to {self.receiver.username}.",
+			verb=f"您取消了向 {self.receiver.username} 发送好友申请",
 			from_user=self.receiver,
 			redirect_url=f"{settings.BASE_URL}/account/{self.receiver.pk}/",
 			content_type=content_type,
 		)
 
 		notification = Notification.objects.get(target=self.receiver, content_type=content_type, object_id=self.id)
-		notification.verb = f"{self.sender.username} cancelled the friend request sent to you."
+		notification.verb = f"{self.sender.username} 取消了向您发送的好友请求"
 		#notification.timestamp = timezone.now()
 		notification.read = False
 		notification.save()
@@ -251,7 +251,7 @@ def create_notification(sender, instance, created, **kwargs):
 			target=instance.receiver,
 			from_user=instance.sender,
 			redirect_url=f"{settings.BASE_URL}/account/{instance.sender.pk}/",
-			verb=f"{instance.sender.username} sent you a friend request.",
+			verb=f"{instance.sender.username} 向您发起了好友申请",
 			content_type=instance,
 		)
 

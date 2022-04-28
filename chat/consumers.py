@@ -49,7 +49,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 				await self.leave_room(content["room"])
 			elif command == "send":
 				if len(content["message"].lstrip()) == 0:
-					raise ClientError(422,"You can't send an empty message.")
+					raise ClientError(422,"您不能发送空消息")
 				await self.send_room(content["room"], content["message"])
 			elif command == "get_room_chat_messages":
 				await self.display_progress_bar(True)
@@ -59,7 +59,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 					payload = json.loads(payload)
 					await self.send_messages_payload(payload['messages'], payload['new_page_number'])
 				else:
-					raise ClientError(204,"Something went wrong retrieving the chatroom messages.")
+					raise ClientError(204,"获取聊天信息失败")
 				await self.display_progress_bar(False)
 			elif command == "get_user_info":
 				await self.display_progress_bar(True)
@@ -69,7 +69,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 					payload = json.loads(payload)
 					await self.send_user_info_payload(payload['user_info'])
 				else:
-					raise ClientError(204, "Something went wrong retrieving the other users account details.")
+					raise ClientError(204, "获取其他用户的账号信息失败")
 				await self.display_progress_bar(False)
 		except ClientError as e:
 			await self.handle_client_error(e)
@@ -182,7 +182,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 				raise ClientError("ROOM_ACCESS_DENIED", "Room access denied")
 		else:
 			print("CLIENT ERRROR 2")
-			raise ClientError("ROOM_ACCESS_DENIED", "Room access denied")
+			raise ClientError("ROOM_ACCESS_DENIED", "聊天室连接失败")
 
 		# Get the room and send to the group about it
 		room = await get_room_or_error(room_id, self.scope["user"])
@@ -328,7 +328,7 @@ def get_room_or_error(room_id, user):
 	try:
 		room = PrivateChatRoom.objects.get(pk=room_id)
 	except PrivateChatRoom.DoesNotExist:
-		raise ClientError("ROOM_INVALID", "Invalid room.")
+		raise ClientError("ROOM_INVALID", "聊天室不合规")
 
 	# Is this user allowed in the room? (must be user1 or user2)
 	if user != room.user1 and user != room.user2:
@@ -338,7 +338,7 @@ def get_room_or_error(room_id, user):
 	friend_list = FriendList.objects.get(user=user).friends.all()
 	if not room.user1 in friend_list:
 		if not room.user2 in friend_list:
-			raise ClientError("ROOM_ACCESS_DENIED", "You must be friends to chat.")
+			raise ClientError("ROOM_ACCESS_DENIED", "您必须先和他（她）成为好友")
 	return room
 
 
@@ -360,7 +360,7 @@ def get_user_info(room, user):
 		payload['user_info'] = s.serialize([other_user])[0] 
 		return json.dumps(payload)
 	except ClientError as e:
-		raise ClientError("DATA_ERROR", "Unable to get that users information.")
+		raise ClientError("DATA_ERROR", "获取用户信息失败")
 	return None
 
 

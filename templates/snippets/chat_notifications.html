@@ -143,7 +143,7 @@
 
 			span1 = document.createElement("span")
 			span1.classList.add("mr-2")
-			span1.innerHTML = "Go to chat"
+			span1.innerHTML = "去聊天"
 			div.appendChild(span1)
 
 			span2 = document.createElement("span")
@@ -159,7 +159,7 @@
 	}
 
 	/*
-		Display a card that says "You have no notifications"
+		Display a card that says "没有聊天信息通知"
 	*/
 	function setupChatNotificationsMenu(){
 		var notificationContainer = document.getElementById("id_chat_notifications_container")
@@ -174,7 +174,7 @@
 
 			span = document.createElement("span")
 			span.classList.add("align-items-start", "pt-1", "m-auto")
-			span.innerHTML = "You have no notifications."
+			span.innerHTML = "没有聊天信息通知"
 			div.appendChild(span)
 			card.appendChild(div)
 			notificationContainer.appendChild(card)
