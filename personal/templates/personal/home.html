@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+
+	<!-- MEDIUM+ SCREENS -->
+	<div class="main d-none d-md-flex flex-column">
+		<div class="card p-4 align-items-start">
+
+			<h3 class="pb-4">Welcome to LinuxOnline Chat!</h3>
+			<p class="pb-2"> <a href="http://www.zrmin.top:8000" target="_blank" rel="nofollow">LinuxOnline</a> 社区的 <a href="#" target="_blank" rel="nofollow">Tyuchat服务</a>.</p>
+			<a class="btn btn-info d-flex flex-row align-items-start" href="#" target="_blank">
+				<span class="d-flex material-icons pr-2">build</span>
+				<span class="d-flex">关于LinuxOnline</span>
+			</a>
+		</div>
+
+		{% include 'public_chat/snippets/public_chat_room.html' with room_id=room_id %}
+
+
+	</div>
+	<!-- END MEDIUM+ SCREENS -->
+	
+	<!-- SMALL SCREENS -->
+	<div class="d-flex d-md-none p-2">
+		<p>This site is not meant to be viewed on a mobile device. Please download the <a href="#">app</a>.</p>
+	</div>
+	<!-- END SMALL SCREENS -->
+</div>
+
+
+{% endblock content %}
+
+
+
+
+
